@@ -3,7 +3,7 @@ This is a sample iOS project using SwiftUI that demonstrates how to display a po
 
 ![Screenshots](https://github.com/bugnitude/SamplePopup/blob/main/README_IMAGES/Screenshots.png)
 
-SwiftUI provides features like the __popover__ modifier, the __contextMenu__ modifier, and the __Menu__ view for displaying popups on top of the main content. However, these features often lack flexibility and customization options. This project introduces a highly flexible implementation for displaying arbitrary views as popups.
+SwiftUI provides features like the popover modifier, the contextMenu modifier, and the Menu view for displaying popups on top of the main content. However, these features often lack flexibility and customization options. This project introduces a highly flexible implementation for displaying arbitrary views as popups.
 
 By applying the implementation from this project, it becomes easy to implement other overlay contents, such as custom alerts and toasts.
 
@@ -14,44 +14,44 @@ Here is the view hierarchy. The names shown in bold are the types used within th
 
 ![View Hierarchy](https://github.com/bugnitude/SamplePopup/blob/main/README_IMAGES/ViewHierarchy.png)
 
-In this project, a popup is displayed on top of the __PassthroughWindow__, which is a window shown in front of the main window. This ensures that the displayed popup will appear in front of all the views presented as the main content.
+In this project, a popup is displayed on top of the PassthroughWindow, which is a window shown in front of the main window. This ensures that the displayed popup will appear in front of all the views presented as the main content.
 
 The following provides detailed descriptions of the main types used in this project.
 
 ## PassThroughWindow, OverlayView
-The __PassthroughWindow__ is a subclass of __UIWindow__ that is always displayed in front of the main window. In the __PassthroughWindow__, the __hitTest(_:)__ method is overridden to ensure that user interactions with the main content are not consumed.
+The PassthroughWindow is a subclass of UIWindow that is always displayed in front of the main window. In the PassthroughWindow, the hitTest(_:) method is overridden to ensure that user interactions with the main content are not consumed.
 
-The __OverlayView__ is a SwiftUI view that is displayed on the __PassthroughWindow__. Above the __OverlayView__, the __PopupContainer__ mentioned later is displayed, and any SwiftUI view can be displayed as a popup on the view.
+The OverlayView is a SwiftUI view that is displayed on the PassthroughWindow. Above the OverlayView, the PopupContainer mentioned later is displayed, and any SwiftUI view can be displayed as a popup on the view.
 
-Within the scope of this project, the __OverlayView__ is actually unnecessary, and it would be sufficient to place the __PopupContainer__ directly on the __PassthroughWindow__. However, the decision to introduce this additional view was made to minimize changes to the existing code when displaying other overlay contents on the __PassthroughWindow__.
+Within the scope of this project, the OverlayView is actually unnecessary, and it would be sufficient to place the PopupContainer directly on the PassthroughWindow. However, the decision to introduce this additional view was made to minimize changes to the existing code when displaying other overlay contents on the PassthroughWindow.
 
 ## SamplePopupApp, AppDelegate, SceneDelegate
-The __SamplePopupApp__ conforms to the __App__ protocol, the __AppDelegate__ conforms to the __UIApplicationDelegate__ protocol, and the __SceneDelegate__ conforms to the __UIWindowSceneDelegate__ protocol.
+The SamplePopupApp conforms to the App protocol, the AppDelegate conforms to the UIApplicationDelegate protocol, and the SceneDelegate conforms to the UIWindowSceneDelegate protocol.
 
-In the __SamplePopupApp__, the __AppDelegate__ is made available for use within the code.
+In the SamplePopupApp, the AppDelegate is made available for use within the code.
 
-In the __AppDelegate__, the __SceneDelegate__ is associated with the app via the __UISceneConfiguration__'s __delegateClass__.
+In the AppDelegate, the SceneDelegate is associated with the app via the UISceneConfiguration's delegateClass.
 
-In the __SceneDelegate__, the previously mentioned __PassthroughWindow__ is associated with the app's scene. The __rootViewController__ of the window is set using __UIHostingController__ with the previously mentioned __OverlayView__ as its __rootView__.
+In the SceneDelegate, the previously mentioned PassthroughWindow is associated with the app's scene. The rootViewController of the window is set using UIHostingController with the previously mentioned OverlayView as its rootView.
 
-It is important to note that a reference to the __PassthroughWindow__ must be retained in the __SceneDelegate__. Without this reference, the window and its overlaid contents will not be displayed.
+It is important to note that a reference to the PassthroughWindow must be retained in the SceneDelegate. Without this reference, the window and its overlaid contents will not be displayed.
 
 ## Popup
-The __Popup__ class conforms to the __ObservableObject__ protocol. This class provides methods for displaying and hiding popups.
+The Popup class conforms to the ObservableObject protocol. This class provides methods for displaying and hiding popups.
 
-The popups are actually displayed on the __PopupContainer__ mentioned later, and multiple popups cannot be displayed simultaneously.
+The popups are actually displayed on the PopupContainer mentioned later, and multiple popups cannot be displayed simultaneously.
 
 To display a popup, the following information is required:
 * Source Frame: The frame of the source from which the popup originates (the origin is in the global coordinate space).
 * Width: The width of the popup.
 * View: The view to be displayed as the popup.
 
-It is possible to display and hide popups directly using the methods of this class. However, to simplify the implementation, this project uses the __PopupModifier__ mentioned later to handle the presentation and dismissal of popups indirectly.
+It is possible to display and hide popups directly using the methods of this class. However, to simplify the implementation, this project uses the PopupModifier mentioned later to handle the presentation and dismissal of popups indirectly.
 
 Since the current implementation does not include the logic for changing the key window, if you need the logic, please implement it in processes such as displaying and hiding popups.
 
 ## PopupModifier
-The __PopupModifier__ is a modifier used to display and hide a popup using the previously mentioned __Popup__ class. The modifier named __PopupModifier__ is private and can be used as an extension method of the __View__ as shown below.
+The PopupModifier is a modifier used to display and hide a popup using the previously mentioned Popup class. The modifier named PopupModifier is private and can be used as an extension method of the View as shown below.
 
 ```
 func popup<Content>(isPresented: Binding<Bool>, width: CGFloat = .infinity, @ViewBuilder content: @escaping (Popup.AnchorPosition) -> Content) -> some View where Content: View
@@ -60,7 +60,7 @@ func popup<Content>(isPresented: Binding<Bool>, width: CGFloat = .infinity, @Vie
 The view to which this modifier is applied will make its frame used as the source from which the popup originates.
 
 ## PopupContainer
-The __PopupContainer__ is a container view for displaying popups, which uses the information received through the previously mentioned __PopupModifier__ and __Popup__.
+The PopupContainer is a container view for displaying popups, which uses the information received through the previously mentioned PopupModifier and Popup.
 
 The main tasks of this view are as follows:
 * Determining the popup's display position
@@ -83,7 +83,7 @@ SomeSourceView()
 
 On the other hand, the height can be explicitly set, and for views whose height is determined dynamically, there is no need to specify it at all. However, if a height greater than the area mentioned above is explicitly specified, the popup will extend beyond the screen and be partially cut off.
 
-The popup is displayed using __matchedGeometryEffect__, and the following two animations are executed during its presentation and dismissal:
+The popup is displayed using matchedGeometryEffect, and the following two animations are executed during its presentation and dismissal:
 * scaleEffect
 * opacity
 
