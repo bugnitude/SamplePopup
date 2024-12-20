@@ -1,7 +1,7 @@
 # Overview
 This is a sample iOS project using SwiftUI that demonstrates how to display a popup.
 
-![Screenshots](https://github.com/bugnitude/SamplePopup/blob/master/README_IMAGES/Screenshots.png)
+![Screenshots](https://github.com/bugnitude/SamplePopup/blob/main/README_IMAGES/Screenshots.png)
 
 SwiftUI provides features like the __popover__ modifier, the __contextMenu__ modifier, and the __Menu__ view for displaying popups on top of the main content. However, these features often lack flexibility and customization options. This project introduces a highly flexible implementation for displaying arbitrary views as popups.
 
@@ -12,7 +12,7 @@ This section provides detailed explanations of the components in this project.
 
 Here is the view hierarchy. The names shown in bold are the types used within the project.
 
-![View Hierarchy](https://github.com/bugnitude/SamplePopup/blob/master/README_IMAGES/ViewHierarchy.png)
+![View Hierarchy](https://github.com/bugnitude/SamplePopup/blob/main/README_IMAGES/ViewHierarchy.png)
 
 In this project, a popup is displayed on top of the __PassthroughWindow__, which is a window shown in front of the main window. This ensures that the displayed popup will appear in front of all the views presented as the main content.
 
@@ -48,7 +48,7 @@ To display a popup, the following information is required:
 
 It is possible to display and hide popups directly using the methods of this class. However, to simplify the implementation, this project uses the __PopupModifier__ mentioned later to handle the presentation and dismissal of popups indirectly.
 
-Since the current implementation does not include the logic for changing the keyWindow, if you need the logic, please implement it in processes such as displaying and hiding popups.
+Since the current implementation does not include the logic for changing the key window, if you need the logic, please implement it in processes such as displaying and hiding popups.
 
 ## PopupModifier
 The __PopupModifier__ is a modifier used to display and hide a popup using the previously mentioned __Popup__ class. The modifier named __PopupModifier__ is private and can be used as an extension method of the __View__ as shown below.
