@@ -51,7 +51,7 @@ It is possible to display and hide popups directly using the methods of this cla
 Since the current implementation does not include the logic for changing the key window, if you need the logic, please implement it in processes such as displaying and hiding popups.
 
 ## PopupModifier
-The PopupModifier is a modifier used to display and hide a popup using the previously mentioned Popup class. The modifier named PopupModifier is private and can be used as an extension method of the View as shown below.
+The PopupModifier is a view modifier used to display and hide a popup using the previously mentioned Popup class. This view modifier is private and is used by the following modifier defined as an extension of View.
 
 ```
 func popup<Content>(isPresented: Binding<Bool>, width: CGFloat = .infinity, @ViewBuilder content: @escaping (Popup.AnchorPosition) -> Content) -> some View where Content: View
